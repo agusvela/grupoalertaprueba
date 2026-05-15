@@ -1,168 +1,159 @@
-# Prueba Técnica — Integra Grupo Alerta
+# Prueba Tecnica — Integra Grupo Alerta
 
-Aplicación web desarrollada como prueba técnica para la vacante de **Desarrollador Jr.** en Integra TI.
+Aplicacion web desarrollada como prueba tecnica para la vacante de Desarrollador Jr. en Integra TI.
 
-## 🚀 Demo en vivo
+## Demo
 
-> Desplegado en Firebase Hosting: [https://grupoalerta-9ddf1.web.app](https://grupoalerta-9ddf1.web.app)
-
----
-
-## 📋 Descripción
-
-Aplicación React con **3 módulos funcionales** presentados como pestañas:
-
-| # | Módulo | Opción |
-|---|--------|--------|
-| 01 | **Procesador XML (CFDI)** | Opción 1 |
-| 02 | **Análisis CSV / Excel** | Opción 2 |
-| 03 | **Registros con Historial** | Opción 3 |
+Disponible en Firebase Hosting: https://grupoalerta-9ddf1.web.app
 
 ---
 
-## 🧩 Funcionalidades por módulo
+## Descripcion
+
+Aplicacion React con tres modulos funcionales independientes, presentados mediante navegacion por pestanas:
+
+| Modulo | Opcion del enunciado |
+|--------|----------------------|
+| Procesador XML (CFDI) | Opcion 1 |
+| Analisis CSV / Excel | Opcion 2 |
+| Registros con Historial | Opcion 3 |
+
+Se decidio implementar las tres opciones en lugar de una sola para demostrar el manejo de distintas tecnologias dentro de un mismo proyecto.
+
+---
+
+## Modulos
 
 ### 01 — Procesador XML (CFDI)
-- ✅ Carga de archivo XML (drag & drop o click)
-- ✅ Soporte CFDI 3.3 y 4.0 con namespaces
-- ✅ Extracción de: Folio, Fecha, Emisor, Receptor, Total, SubTotal, Moneda, Conceptos
-- ✅ Validaciones: XML inválido, archivo vacío, nodos faltantes, Total no numérico
-- ✅ Guardar en Firestore con verificación de duplicados por folio
-- ✅ Visualización del XML raw
 
-### 02 — Análisis CSV / Excel
-- ✅ Carga de archivos `.csv`, `.xlsx`, `.xls`
-- ✅ Mapeo automático de columnas (case-insensitive, ignora acentos)
-- ✅ Validaciones por fila: campos vacíos, montos inválidos, fechas mal formateadas
-- ✅ Detección de folios duplicados
-- ✅ Resumen: total de registros, suma de montos, agrupación por estatus y categoría
-- ✅ Filtros por texto y estatus
-- ✅ Exportar resultados a CSV
-- ✅ Guardar análisis en Firestore
+Permite cargar un archivo XML de factura electronica (CFDI SAT Mexico) y extraer su contenido estructurado.
+
+Funcionalidades:
+- Carga por seleccion de archivo o arrastrar y soltar
+- Compatibilidad con CFDI 3.3 y 4.0 (manejo de namespaces)
+- Extraccion de: Folio, Fecha, Emisor (nombre, RFC, regimen), Receptor (nombre, RFC, uso CFDI), Total, SubTotal, Moneda y lista de Conceptos
+- Validaciones: archivo vacio, XML malformado, nodos faltantes, Total no numerico
+- Guardado del documento en Firestore con verificacion opcional de duplicados por folio
+- Visualizacion del XML original en pantalla
+
+### 02 — Analisis CSV / Excel
+
+Permite cargar archivos tabulares y generar un resumen del contenido.
+
+Funcionalidades:
+- Soporte para .csv, .xlsx y .xls
+- Deteccion automatica de columnas (insensible a mayusculas y acentos)
+- Columnas requeridas: Folio, Fecha, Categoria, Monto, Estatus
+- Validaciones por fila: campos vacios, montos no numericos, fechas con formato incorrecto
+- Deteccion de folios duplicados
+- Resumen agrupado por estatus y por categoria (conteo y suma de montos)
+- Filtro por texto y por estatus
+- Exportar registros validos a CSV
+- Guardado del analisis en Firestore
 
 ### 03 — Registros con Historial de Cambios
-- ✅ Crear registros (con validación de folio único)
-- ✅ Listar registros con filtros
-- ✅ Actualizar estado con motivo obligatorio
-- ✅ Historial automático en creación y actualización
-- ✅ Eliminación lógica (soft delete) con evento en historial
-- ✅ Panel de detalle con timeline de eventos por registro
-- ✅ Historial global paginado
-- ✅ Actualizaciones en tiempo real (Firestore `onSnapshot`)
+
+CRUD de registros con auditoria automatica de cambios.
+
+Funcionalidades:
+- Crear registros con validacion de folio unico
+- Listar registros con filtros por estado y folio
+- Actualizar estado con motivo obligatorio
+- Registro automatico de historial en creacion y actualizacion
+- Eliminacion logica (soft delete) con evento en historial
+- Panel de detalle con linea de tiempo de eventos por registro
+- Historial global de eventos (ultimos 50)
+- Actualizaciones en tiempo real mediante Firestore onSnapshot
 
 ---
 
-## 🛠️ Tecnologías
+## Tecnologias
 
-- **React 18** + **TypeScript**
-- **Vite** (bundler)
-- **Firebase** (Firestore + Hosting)
-- **PapaParse** — parsing de CSV
-- **SheetJS (xlsx)** — parsing de Excel
-- CSS vanilla con diseño dark mode premium
+- React 18 con TypeScript
+- Vite
+- Firebase (Firestore + Hosting)
+- PapaParse — lectura de archivos CSV
+- SheetJS (xlsx) — lectura de archivos Excel
+- CSS vanilla, tema corporativo claro
 
 ---
 
-## ⚙️ Instrucciones para ejecutar
+## Instrucciones para ejecutar
 
-### Prerequisitos
-- Node.js >= 18
-- npm >= 9
+Requisitos previos: Node.js >= 18, npm >= 9
 
-### 1. Clonar e instalar
 ```bash
-git clone <repo-url>
-cd "grupo alerta"
+# 1. Instalar dependencias
 npm install
+
+# 2. Ejecutar en modo desarrollo
+npm run dev
+# Disponible en http://localhost:5173
+
+# 3. Build de produccion
+npm run build
+
+# 4. Desplegar a Firebase Hosting
+firebase deploy --only hosting
 ```
 
-### 2. Variables de entorno (opcional)
-El proyecto incluye la config de Firebase directamente, pero puedes usar variables de entorno:
+### Variables de entorno
+
+El proyecto incluye la configuracion de Firebase directamente en `src/lib/firebase.ts`.
+Para usar variables de entorno en su lugar, copie el archivo de ejemplo:
+
 ```bash
 cp .env.example .env
-# Edita .env con tus valores de Firebase
-```
-
-### 3. Ejecutar en desarrollo
-```bash
-npm run dev
-```
-Abre [http://localhost:5173](http://localhost:5173)
-
-### 4. Build de producción
-```bash
-npm run build
-```
-
-### 5. Desplegar a Firebase
-```bash
-npm install -g firebase-tools
-firebase login
-npm run build
-firebase deploy
 ```
 
 ---
 
-## 🏗️ Estructura del proyecto
+## Estructura del proyecto
 
 ```
 src/
-├── components/
-│   ├── XMLProcessor.tsx    # Módulo 1: Parser XML CFDI
-│   ├── CSVAnalyzer.tsx     # Módulo 2: Análisis CSV/Excel
-│   └── RecordsHistory.tsx  # Módulo 3: Registros + Historial
-├── lib/
-│   └── firebase.ts         # Inicialización Firebase
-├── App.tsx                 # Shell con navegación por pestañas
-├── main.tsx                # Entry point
-└── index.css               # Design system CSS
+  components/
+    XMLProcessor.tsx    # Modulo 1 — parser XML CFDI
+    CSVAnalyzer.tsx     # Modulo 2 — analisis CSV/Excel
+    RecordsHistory.tsx  # Modulo 3 — registros con historial
+  lib/
+    firebase.ts         # Inicializacion de Firebase
+  App.tsx               # Shell de la aplicacion y navegacion
+  main.tsx              # Punto de entrada
+  index.css             # Estilos globales
 ```
 
----
+## Colecciones en Firestore
 
-## 🗄️ Colecciones Firestore
-
-| Colección | Descripción |
+| Coleccion | Descripcion |
 |-----------|-------------|
-| `xml_documentos` | CFDIs procesados y guardados |
-| `csv_analisis` | Resultados de análisis CSV/Excel |
-| `registros` | Entidad principal (Módulo 3) |
-| `historial` | Eventos de cambio por registro |
+| `xml_documentos` | Documentos CFDI procesados |
+| `csv_analisis` | Resultados de analisis de archivos tabulares |
+| `registros` | Entidad principal del modulo de historial |
+| `historial` | Eventos de auditoria por registro |
 
 ---
 
-## 🔐 Seguridad
+## Decisiones tecnicas
 
-- Variables de entorno con `.env.example`
-- Firestore rules deben configurarse en producción para auth
-- No se exponen claves secretas en el código (solo config pública de Firebase)
+**Sin backend separado.** El procesamiento de XML y CSV se realiza en el cliente (navegador). Para un entorno de produccion real, esta logica se moveria a Cloud Functions para evitar exponer la configuracion de Firebase y para manejar archivos de mayor tamano.
 
----
+**Parser XML flexible.** Se implemento soporte para multiples namespaces (CFDI 3.3 y 4.0) con fallback por localName, para no depender de una version especifica del estandar.
 
-## 🚀 Qué mejoraría para producción
+**Mapeo de columnas CSV tolerante a variaciones.** El sistema normaliza encabezados (minusculas, sin acentos) para evitar fallos cuando el archivo usa variaciones tipograficas en los nombres de columna.
 
-1. **Autenticación**: Firebase Auth para proteger las rutas y asociar datos a usuarios
-2. **Firestore Security Rules**: Reglas estrictas por usuario autenticado
-3. **Variables de entorno reales**: Usar `import.meta.env` en lugar de hardcodear la config
-4. **Paginación**: Para colecciones grandes en Firestore (cursor-based pagination)
-5. **Pruebas unitarias**: Vitest + Testing Library para los parsers XML y CSV
-6. **Docker**: Containerizar el servidor de desarrollo para reproducibilidad
-7. **CI/CD**: GitHub Actions para deploy automático a Firebase en cada push a main
-8. **Swagger/OpenAPI**: Si se extrae la lógica a Cloud Functions, documentar los endpoints
-9. **Error logging**: Integrar Sentry o Firebase Crashlytics
-10. **Optimistic updates**: Para mejor UX en el módulo 3
+**Tiempo real en modulo 3.** Se usa `onSnapshot` de Firestore para que los cambios de estado sean visibles sin necesidad de recargar la pagina, lo que facilita el uso en entornos con multiples usuarios.
+
+**Soft delete.** Los registros eliminados se marcan con `eliminadoLogico: true` en lugar de borrarse, preservando el historial de auditoria completo.
 
 ---
 
-## 👤 Decisiones técnicas
+## Mejoras para produccion
 
-- **Sin backend separado**: La lógica de procesamiento corre en el cliente. Para producción se extraería a Cloud Functions para mayor seguridad y escala.
-- **Soporte CFDI 3.3 y 4.0**: El parser XML maneja múltiples namespaces y hace fallback a búsqueda por localName.
-- **Mapeo flexible de columnas CSV**: Normaliza acentos y mayúsculas para evitar fallos por diferencias tipográficas.
-- **Real-time en módulo 3**: Se usa `onSnapshot` para que múltiples usuarios vean cambios sin recargar.
-- **Soft delete**: Los registros eliminados se marcan como `eliminadoLogico: true` para conservar el historial de auditoría.
-
----
-
-*Desarrollado para la Prueba Técnica de Integra Grupo Alerta — Mayo 2026*
+- Autenticacion con Firebase Auth y reglas de seguridad en Firestore por usuario
+- Paginacion en colecciones grandes mediante cursores de Firestore
+- Pruebas unitarias con Vitest para los parsers de XML y CSV
+- Variables de entorno mediante `import.meta.env` en lugar de valores directos
+- Code splitting para reducir el tamano del bundle (actualmente ~860 KB)
+- Pipeline de CI/CD con GitHub Actions para deploy automatico en push a main
+- Contenedor Docker para reproducibilidad del entorno de desarrollo
