@@ -86,25 +86,33 @@ Requisitos previos: Node.js >= 18, npm >= 9
 # 1. Instalar dependencias
 npm install
 
-# 2. Ejecutar en modo desarrollo
+# 2. Ejecutar la aplicacion web (Frontend) en modo desarrollo
 npm run dev
 # Disponible en http://localhost:5173
 
-# 3. Build de produccion
+# 3. Ejecutar la API REST (Backend para la Opcion 3)
+npm run api
+# Disponible en http://localhost:3001
+
+# 4. Build de produccion del Frontend
 npm run build
 
-# 4. Desplegar a Firebase Hosting
+# 5. Desplegar a Firebase Hosting
 firebase deploy --only hosting
 ```
 
+### Endpoints de la API (Opcion 3)
+
+La API REST fue construida con Express.js y se conecta a la misma base de datos Firestore.
+
+- `GET /api/registros` — Obtiene todos los registros activos.
+- `GET /api/registros/:id` — Obtiene un registro por ID junto con su historial de eventos.
+- `POST /api/registros` — Crea un nuevo registro. Requiere `{ "folio": "...", "descripcion": "..." }`.
+- `PATCH /api/registros/:id/estado` — Actualiza el estado. Requiere `{ "estado": "...", "motivo": "..." }`.
+
 ### Variables de entorno
 
-El proyecto incluye la configuracion de Firebase directamente en `src/lib/firebase.ts`.
-Para usar variables de entorno en su lugar, copie el archivo de ejemplo:
-
-```bash
-cp .env.example .env
-```
+El proyecto incluye la configuracion de Firebase directamente en `src/lib/firebase.ts` y en `server.js` para facilitar la ejecucion de la prueba. Para un entorno real, use `.env`.
 
 ---
 
